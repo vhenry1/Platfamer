@@ -35,7 +35,7 @@ public class ShopManager : MonoBehaviour
             {
                 if (coins < playerController.score) // Only update coins if PlayerController's score is higher
                 {
-                    coins = playerController.score - fertilizer * 5 - seeds * 2; // Deduct costs of fertilizer and seeds from score to calculate coins
+                    coins = playerController.score - fertilizer * 5 - seeds * 2 - playerController.plantsGrown*5 - playerController.seedsPlanted*2; // Deduct costs of fertilizer and seeds from score to calculate coins
                 }
                 else
                 {

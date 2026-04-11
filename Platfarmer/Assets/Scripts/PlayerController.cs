@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
+    private Collider2D touchingPlantCollider = null;
     private ShopManager shopManager;
     public GameObject sprout;
     public GameObject Plant;
@@ -16,10 +17,12 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rb;
     private bool isGrounded = false;
     private bool farmGrounded = false;
-    private int plantHeight = 0;
+    private float plantHeight = 0;
     private int health = 100;
     public int score = 0;
     private int plantLocationX = 0;
+    public int seedsPlanted = 0;
+    public int plantsGrown = 0;
     
     void Start()
     {
@@ -57,7 +60,7 @@ public class PlayerController : MonoBehaviour
         // Use a valid input for growing plant, e.g., another button like "Fire2" (must be set in Input Manager)
         if (Input.GetButtonDown("Fire2") && (touchingSprout))
         {
-            growPlant();
+            GrowPlant(touchingPlantCollider);
         }
         if (Input.GetButtonDown("Fire2") && (touchingPlant))
         {
@@ -67,9 +70,9 @@ public class PlayerController : MonoBehaviour
         {
             climbPlant();
         }
-        if (Input.GetButtonDown("Fire3") && (touchingPlant))
+        if (Input.GetButtonDown("Fire3") && (touchingPlant) && touchingPlantCollider != null)
         {
-            Harvest();
+            Harvest(touchingPlantCollider);
         }
     }
     
@@ -93,6 +96,7 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject.CompareTag("plant"))
         {
             touchingPlant = true;
+            touchingPlantCollider = collision.collider;
             UnityEngine.Debug.Log("Player is touching the plant");
         }
         
@@ -109,13 +113,18 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-    void Harvest()
+    void Harvest( Collider2D other)
     {
-        if (touchingPlant)
+        if (other.CompareTag("plant"))
         {
-            score += 20; // Increase score for harvesting
-            plantHeight = 0; // Reset plant height after harvesting
-            Destroy(GameObject.FindWithTag("plant")); // Remove the plant from the scene
+            Destroy(other.gameObject);
+            if (plantHeight <=1)
+            {
+                score += 10; // Increase score for harvesting
+                plantHeight = 0; // Reset plant height after harvesting
+            }
+
+
             UnityEngine.Debug.Log("Player harvested the plant");
             UpdateUI();
         }
@@ -126,12 +135,13 @@ public class PlayerController : MonoBehaviour
         {
             if (Input.GetAxis("Vertical") > 0) // Check if player is pressing up
             {
-                rb.position += new Vector2(0, plantHeight); // Move player up by the plant's height
+                // ...existing code...
+                rb.position += new Vector2(1, plantHeight+1); // Move player up by the plant's height
                 UnityEngine.Debug.Log("Player climbed the plant");
             }
             else if (Input.GetAxis("Vertical") < 0) // Check if player is pressing down
             {
-                rb.position -= new Vector2(0, plantHeight); // Move player down by the plant's height
+                rb.position -= new Vector2(0, plantHeight-1); // Move player down by the plant's height
                 UnityEngine.Debug.Log("Player climbed down the plant");
             }
 
@@ -141,9 +151,10 @@ public class PlayerController : MonoBehaviour
     { 
         if (shopManager != null && shopManager.seeds > 0)
         {
+            seedsPlanted++;
             plantLocationX = (int)transform.position.x; // Get player's current X position to plant at that location
-            plantHeight = 0; // Reset plant height when planting new seeds
-            Instantiate(sprout, transform.position + new Vector3(0, plantHeight, 0), Quaternion.identity);
+            plantHeight = -0.5f; // Reset plant height when planting new seeds
+            Instantiate(sprout, transform.position + new Vector3(1, plantHeight, 0), Quaternion.identity);
             shopManager.seeds--;
             UnityEngine.Debug.Log("Player planted seeds");
             shopManager.updateText();
@@ -157,14 +168,16 @@ public class PlayerController : MonoBehaviour
             UnityEngine.Debug.Log("No seeds to plant!");
         }
     }
-    void growPlant()
+    void GrowPlant(Collider2D other)
     {
-        if (touchingSprout && farmGrounded)
-        {
-            UnityEngine.Debug.Log("Touching the sprout");
+        
             if (shopManager != null && shopManager.fertilizer > 0)
             {
-                
+            if (other.CompareTag("sprout"))
+            {
+            Destroy(other.gameObject);
+            UnityEngine.Debug.Log("Touching the sprout");
+                plantsGrown++;
                 plantHeight += 1; // Update plant height based on its scale
                 Instantiate(Plant, transform.position + new Vector3(1, plantHeight, 0), Quaternion.identity);
                 shopManager.fertilizer--;
@@ -175,10 +188,6 @@ public class PlayerController : MonoBehaviour
                     UnityEngine.Debug.Log("No more fertilizer to use!");
                 }
             }
-            else
-            {
-                UnityEngine.Debug.Log("No fertilizer to use!");
-            }
         }
     }
     void makePlantTaller()
@@ -187,7 +196,7 @@ public class PlayerController : MonoBehaviour
         {
             if (shopManager != null && shopManager.fertilizer > 0)
             {
-
+            plantsGrown++;
             plantHeight += 1; // Update plant height based on its scale
             Instantiate(Plant, transform.position + new Vector3(1, plantHeight, 0), Quaternion.identity);
             shopManager.fertilizer--;
