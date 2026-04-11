@@ -11,7 +11,7 @@ public class ShopManager : MonoBehaviour
     private Rigidbody2D rb;
     private bool isPlayerInShop = false;
     public int coins = 0;
-    private int fertilizer = 0;
+    public int fertilizer = 0;
     public int seeds = 0;
     
     void Start()
@@ -21,6 +21,7 @@ public class ShopManager : MonoBehaviour
         DeactivateShop();
     }
     
+    
     void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Player"))
@@ -28,16 +29,24 @@ public class ShopManager : MonoBehaviour
             isPlayerInShop = true;
             UnityEngine.Debug.Log("Player entered shop");
             Panel.SetActive(true);
-            // Get score directly from PlayerController
+            // No longer reset coins from PlayerController score
             PlayerController playerController = collision.gameObject.GetComponent<PlayerController>();
             if (playerController != null)
             {
-                coins = playerController.score;
+                if (coins < playerController.score) // Only update coins if PlayerController's score is higher
+                {
+                    coins = playerController.score - fertilizer * 5 - seeds * 2; // Deduct costs of fertilizer and seeds from score to calculate coins
+                }
+                else
+                {
+                    coins = coins; // Keep existing coins if PlayerController's score is not higher
+                }
             }
             else
             {
                 coins = 0;
             }
+            updateText();
         }
     
     }
