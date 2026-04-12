@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -13,4 +12,5 @@ public class MenuController : MonoBehaviour
         gameObject.SetActive(false);
         UnityEngine.Debug.Log("Start Game button clicked, loading Lobby");
     }
+    
 }
