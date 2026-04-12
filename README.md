@@ -32,7 +32,7 @@ Make it through the platformer section and farm your way up.
 
 ## Project Structure
 
-arena-blitz/
+platfarmer/
 ├── README.md
 ├── Assets/
 │   ├── Scenes/
