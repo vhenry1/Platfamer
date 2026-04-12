@@ -1,19 +1,84 @@
-# Platfamer
-
-Play platfarmer by navigating through the platformer section using your spacebar and arrow keys. After you get to the farm, buy seeds in the shop with the money you collected and fertilizer to grow them. Plant your seeds using the E button. Grow them into plants using the Q button and harvest them using H. Gather as much money as you can to grow a beanstalk into the sky!
-
-
+# Platfarmer
 
 Combine farming and co-op platformer in this fast-paced race to the clouds in Platfarmer. Plant and water a beanstalk, either climb or harvest for money to reach the next section. Use fertilizer to grow the plants. Buy the fertilizer with the money you get from selling the plants.
-This can be achieved with minimal art and basic code while also demonstrating unique uses. I want to focus on being able to move the camera and code. I will intentionally be using simplistic art and simple multiplayer functions. This demonstrates that I can solve challenges and create unique functions with simple code.
-Players win by reaching the clouds. This will cause the game to immediately end. Players grow plants, harvest and sell them to buy fertilizer. When they get fertilizer, they will take it to grow a taller plant. Moving up to the next section to repeat this process on the clouds.
-Each time players reach a platform, the fertilizer will get more expensive. I might decide to add some special abilities later, but for now, no. Each section is connected, but will have a definition with the platformer in it. The area will contain the ground and a shop area to start. You can go up and around to collect extra coins, and when you reach the platform area, you will be able to move sideways to the next area to go up.
-Players will use the arrow keys to move around the space and use the spacebar to harvest the plants. The O button will be used to interact with the shop. The I button will be used to access the menu to navigate settings. I don’t plan on having any other special buttons.
-This will be a co-op game and will make it so I have to decide if there will be a shared and network-synced shop or if it will be individually owned materials. This will make it so that only one player will need to make it to the next save point for both players to respawn there, since it is co-op. The player positions and game state need to be synchronized as well as the most recent save point for either player.
-This will only be a 2-player game to prevent it from getting too crowded. Due to it being a co-op game, I did not want to risk it becoming overcrowded. I will have a lobby scene. I plan on making co-op an optional function and allowing a second player to join, but making the game fully playable alone.
-I will likely use a delegate for tracking how much of something players have in their inventory. I will likely use a singleton to track how many times a player has respawned and how many coins a player has collected overall. I will likely use an object pool for spawning collectable coins in the platformer section. I plan on placing a light source in my shop stalls to add ambiance. I hope to enhance player experience with sound effects that I can either create easily or find online.
-For my game scenes, I will have my main menu, lobby, and end screen. Within the game, I will break up the individual sections into different screens, but I am not sure of how many and where at the moment.
 
-The main information is how many times you’ve respawned and how many save points you’ve reached. Then you need to know how many coins you got overall and how many you currently have. How much fertilizer do you have currently, and how many plants have you grown total?
-This does increase progression and makes it so you can improve scores later; there can be more easily implemented achievements for different things when these are already tracked.
+
+## Setup
+
+### Prerequisites
+- Unity 2022.3 LTS or later
+- Git
+
+### Installation
+
+1. Clone this repository:
+```bash
+git clone https://github.com/yourusername/arena-blitz.git
+```
+3. Open the project in Unity Hub
+4. Open the MainMenu scene in Assets/Scenes/
+5. Press Play to test in the editor
+
+## How to Play
+
+### Controls
+- WASD: Move
+- E: Plant Seeds
+- Q: Grow Seeds to Plants
+- H: Harvest Plants
+
+### Objective
+Make it through the platformer section and farm your way up. 
+
+## Project Structure
+
+arena-blitz/
+├── README.md
+├── Assets/
+│   ├── Scenes/
+│   │   ├── MainMenu.unity
+│   │   ├── Lobby.unity
+│   │   ├── Level1.unity
+|   |   └── GameOver.unity
+│   ├── Scripts/
+│   │   ├── Managers/
+│   │   ├── Player/
+│   │   ├── Shop/
+│   │   └── UI/
+│   ├── Prefabs/
+│   └── Audio/
+├── Packages/
+└── ProjectSettings/
+
+## Technical Implementation
+
+**Singleton Pattern**
+- Location: Assets/Scripts/Managers/GameManager.cs
+- Description: Manages game state across scenes
+
+**Delegate**
+- Location: Assets/Scripts/Player/Health.cs
+- Description: OnPlayerDamaged event notifies UI when player takes damage
+
+**Object Pool Pattern**
+- Location: Assets/Scripts/Combat/CoinManager.cs
+- Description: Pools coin instances
+
+## Known Issues
+
+- Multiplayer issues 
+- Issues with graphics spawn locations when growing.
+
+## Future Enhancements (Final Submission)
+
+- Multiplayer
+- Pause menu with settings
+- Better UI
+
+## Technologies Used
+
+- **Unity 2022.3 LTS**: Game engine
+- **Netcode for GameObjects**: Multiplayer networking
+- **TextMeshPro**: UI text rendering
+
 
