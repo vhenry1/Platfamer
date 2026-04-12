@@ -13,7 +13,7 @@ Combine farming and co-op platformer in this fast-paced race to the clouds in Pl
 
 1. Clone this repository:
 ```bash
-git clone https://github.com/yourusername/arena-blitz.git
+git clone https://github.com/vhenry1/platfarmer.git
 ```
 3. Open the project in Unity Hub
 4. Open the MainMenu scene in Assets/Scenes/
