@@ -1,6 +1,9 @@
 # Platfarmer
 
-Combine farming and co-op platformer in this fast-paced race to the clouds in Platfarmer. Plant and water a beanstalk, either climb or harvest for money to reach the next section. Use fertilizer to grow the plants. Buy the fertilizer with the money you get from selling the plants.
+Combine farming and co-op platformer in this fast-paced race to the clouds in Platfarmer. Gather coins and grow crops to gain 150 points in each level. Reach 300 points to win and reach the clouds. 
+
+Documentation Video
+[Link Text](https://www.loom.com/share/9c371a3427a74fe09972f31f29edc4ae)
 
 
 ## Setup
@@ -23,12 +26,14 @@ git clone https://github.com/vhenry1/platfarmer.git
 
 ### Controls
 - WASD: Move
+- Space: Jump
 - E: Plant Seeds
 - Q: Grow Seeds to Plants
 - H: Harvest Plants
+- P: Open and Close Pause Menu
 
 ### Objective
-Make it through the platformer section and farm your way up. 
+Make it through the platformer section and farm to gain more money and points. 
 
 ## Project Structure
 
@@ -39,6 +44,11 @@ platfarmer/
 │   │   ├── MainMenu.unity
 │   │   ├── Lobby.unity
 │   │   ├── Level1.unity
+│   │   ├── Level2.unity
+│   │   ├── Bootstrapper.unity
+│   │   ├── HighScores.unity
+│   │   ├── UIScene.unity
+│   │   ├── WinScreen.unity
 |   |   └── GameOver.unity
 │   ├── Scripts/
 │   │   ├── Managers/
@@ -53,11 +63,15 @@ platfarmer/
 ## Technical Implementation
 
 **Singleton Pattern**
-- Location: Assets/Scripts/Managers/GameManager.cs
+- Location: Assets/Scripts/GameManager.cs
 - Description: Manages game state across scenes
 
+**Singleton Pattern**
+- Location: Assets/Scripts/AudioManager.cs
+- Description: Manages audio across game scenes
+
 **Delegate**
-- Location: Assets/Scripts/Player/Health.cs
+- Location: Assets/Scripts/PlayerController/Health.cs
 - Description: OnPlayerDamaged event notifies UI when player takes damage
 
 **Object Pool Pattern**
@@ -73,12 +87,12 @@ platfarmer/
 
 - Multiplayer
 - Pause menu with settings
-- Better UI
 
 ## Technologies Used
 
 - **Unity 2022.3 LTS**: Game engine
 - **Netcode for GameObjects**: Multiplayer networking
 - **TextMeshPro**: UI text rendering
+- **SceneManagement**: Moving between scenes with persistence
 
 

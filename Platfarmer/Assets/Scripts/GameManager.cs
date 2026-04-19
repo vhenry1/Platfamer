@@ -1,5 +1,17 @@
 using UnityEngine;
+using System.IO;
 using System;
+
+[System.Serializable]
+public class GameData
+{
+    public string playerName;
+    public int currentLevel;
+    public int totalScore;
+    public int health;          // Fix #2: persist health
+    public float playTime;
+    public bool[] unlockedLevels;
+}
 
 public class GameManager : MonoBehaviour
 {
@@ -9,11 +21,12 @@ public class GameManager : MonoBehaviour
     public event Action<int> onHealthChanged;
     public event Action onGameOver;
 
-    private int score = 0;
-    private int health = 100;
+    // Fix #1: single source of truth — read directly from gameData
+    public int Score => gameData?.totalScore ?? 0;
+    public int Health => gameData?.health ?? 100;
 
-    public int Health => health;
-    public int Score => score;
+    private GameData gameData;
+    private string savePath;
 
     void Awake()
     {
@@ -22,68 +35,77 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-
         Instance = this;
-
         DontDestroyOnLoad(gameObject);
+
+        savePath = Path.Combine(Application.persistentDataPath, "gamesave.json");
+        LoadGame();
     }
 
-    public void AddScore(int points)
+    public void SaveGame()
     {
-        score += points;
-        onScoreChanged?.Invoke(score);
+        string json = JsonUtility.ToJson(gameData, true);
+        File.WriteAllText(savePath, json);
+        Debug.Log("Game saved!");
+    }
+
+    public void LoadGame()
+    {
+        if (File.Exists(savePath))
+        {
+            string json = File.ReadAllText(savePath);
+            gameData = JsonUtility.FromJson<GameData>(json);
+            Debug.Log("Game loaded!");
+        }
+        else
+        {
+            gameData = new GameData
+            {
+                playerName = "Player",
+                currentLevel = 1,
+                totalScore = 0,
+                health = 100,               // Fix #2: initialise health in save data
+                playTime = 0f,
+                unlockedLevels = new bool[10]
+            };
+            gameData.unlockedLevels[0] = true;
+            Debug.Log("No save file found. Starting new game.");
+        }
+    }
+
+    public void AddScore(int amount)
+    {
+        gameData.totalScore += amount;      // Fix #1: one field, not two
+        onScoreChanged?.Invoke(gameData.totalScore);
     }
 
     public void TakeDamage(int damage)
     {
-        health -= damage;
+        gameData.health = Mathf.Max(0, gameData.health - damage); // Fix #3: clean clamp
+        AudioManager.Instance.PlaySoundEffect(AudioManager.Instance.damageSound);
+        onHealthChanged?.Invoke(gameData.health);
 
-        if (health < 0)
-            health = 0;
-
-        onHealthChanged?.Invoke(health);
+        if (gameData.health == 0)
+            TriggerGameOver();
     }
 
     public void ResetGame()
     {
-        score = 0;
-        health = 100;
+        gameData.totalScore = 0;
+        gameData.health = 100;
 
-        onScoreChanged?.Invoke(score);
-        onHealthChanged?.Invoke(health);
+        onScoreChanged?.Invoke(gameData.totalScore);
+        onHealthChanged?.Invoke(gameData.health);
     }
 
     public void TriggerGameOver()
     {
-        onGameOver?.Invoke();
+        onGameOver?.Invoke(); // Fix #5
     }
+
     void OnDestroy()
     {
         if (Instance == this)
-        {
             Instance = null;
-        }
     }
-    private void OnTriggerEnter2D(Collider2D other)
-{
-    if (other.CompareTag("Coin"))
-    {
-        // Instead of Destroy(other.gameObject);
-        CoinPoolManager.Instance.ReturnCoin(other.gameObject);
-        
-        // Update score via GameManager
-        GameManager.Instance.AddScore(1); 
-    }
-}
-
-// Inside your Jump method
-public void Jump()
-{
-    // ... existing jump logic ...
-    AudioManager.Instance.PlaySoundEffect(AudioManager.Instance.jumpSound);
-}
-public int GetScore()
-{
-    return score;
-}
 }

@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.github-glitchenzo.nugetforunity": "file:C:/Users/jenna/Downloads/NuGetForUnity-4.5.0/NuGetForUnity-4.5.0/src/NuGetForUnity",
     "com.unity.2d.animation": "13.0.4",
     "com.unity.2d.aseprite": "3.0.1",
     "com.unity.2d.psdimporter": "12.0.1",

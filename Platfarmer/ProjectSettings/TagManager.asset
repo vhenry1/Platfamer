@@ -12,6 +12,8 @@ TagManager:
   - Panel
   - plant
   - sprout
+  - CinemachineCamer
+  - CinemachineCamera
   layers:
   - Default
   - TransparentFX

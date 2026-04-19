@@ -1,0 +1,11 @@
+{
+    "name": "Unity2b42412ee30e615a02b8.Nuget.Tests",
+    "references": [
+        "Unity2b42412ee30e615a02b8.Nuget"
+    ],
+    "optionalUnityReferences": [
+        "TestAssemblies"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": []
+}

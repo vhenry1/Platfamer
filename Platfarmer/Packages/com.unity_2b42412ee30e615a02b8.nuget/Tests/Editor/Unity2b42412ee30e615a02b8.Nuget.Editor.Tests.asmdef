@@ -1,0 +1,14 @@
+{
+    "name": "Unity2b42412ee30e615a02b8.Nuget.Editor.Tests",
+    "references": [
+        "Unity2b42412ee30e615a02b8.Nuget.Editor",
+        "Unity2b42412ee30e615a02b8.Nuget"
+    ],
+    "optionalUnityReferences": [
+        "TestAssemblies"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": []
+}
