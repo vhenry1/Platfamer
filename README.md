@@ -2,9 +2,6 @@
 
 Combine farming and co-op platformer in this fast-paced race to the clouds in Platfarmer. Gather coins and grow crops to gain 150 points in each level. Reach 300 points to win and reach the clouds. 
 
-Documentation Video
-[Link Text](https://www.loom.com/share/9c371a3427a74fe09972f31f29edc4ae)
-
 
 ## Setup
 
